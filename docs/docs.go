@@ -57,6 +57,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/tasks/status/{id}": {
+            "patch": {
+                "description": "Change status of a task by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Change Task Status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "uint64",
+                        "description": "Task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status object to be created",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.StatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
+            }
+        },
         "/tasks/{id}": {
             "get": {
                 "description": "Get a task by its ID",
@@ -160,6 +202,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controllers.StatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "controllers.TaskRequest": {
             "type": "object",
             "properties": {
@@ -177,9 +227,9 @@ const docTemplate = `{
         "models.Status": {
             "type": "string",
             "enum": [
-                "todo",
-                "doing",
-                "done"
+                "TODO",
+                "DOING",
+                "DONE"
             ],
             "x-enum-varnames": [
                 "TODO",

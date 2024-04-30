@@ -20,6 +20,7 @@ func setupRoutes(app *fiber.App, taskController *controllers.TaskController) {
 	app.Delete("/tasks/:id", taskController.DeleteTask)
 	app.Get("/tasks", taskController.GetAllTasks)
 	app.Get("/tasks/:id", taskController.GetTaskById)
+	app.Patch("/tasks/status/:id", taskController.ChangeTaskStatus)
 }
 
 func main() {

@@ -19,6 +19,10 @@ type TaskRequest struct {
 	Status      string `json:"status" enum:"TODO,DOING,DONE"`
 }
 
+type StatusRequest struct {
+	Status string `json:"status" enum:"TODO,DOING,DONE"`
+}
+
 func NewTaskController(taskService *services.TaskService) *TaskController {
 	return &TaskController{taskService}
 }
@@ -126,4 +130,35 @@ func (tc *TaskController) GetTaskById(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(task)
+}
+
+// @Summary Change Task Status
+// @Description Change status of a task by ID
+// @Tags Task
+// @Accept json
+// @Produce json
+// @Param id path integer true "Task ID" Format(uint64)
+// @Param task body StatusRequest true "Status object to be created"
+// @Success 200 {object} models.Task
+// @Router /tasks/status/{id} [patch]
+func (tc *TaskController) ChangeTaskStatus(c *fiber.Ctx) error {
+	// Parse task ID from request path parameter
+	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid task ID"})
+	}
+
+	// Parse new status from request body
+	var status StatusRequest
+	if err := c.BodyParser(&status); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Call service method to change task status
+	err = tc.taskService.ChangeTaskStatus(uint(id), status)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.SendStatus(fiber.StatusOK)
 }
