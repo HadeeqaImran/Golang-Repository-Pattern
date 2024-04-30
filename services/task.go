@@ -2,7 +2,8 @@ package services
 
 import (
 	"errors"
-	"repo_pattern/controllers"
+
+	"repo_pattern/dto"
 	"repo_pattern/models"
 	"repo_pattern/repositories"
 )
@@ -43,7 +44,7 @@ func (ts *TaskService) GetTaskById(id uint) (*models.Task, error) {
 }
 
 // ChangeTaskStatus changes the status of a task.
-func (ts *TaskService) ChangeTaskStatus(id uint, newStatus controllers.StatusRequest) error {
+func (ts *TaskService) ChangeTaskStatus(id uint, newStatus dto.StatusRequest) error {
 	// Check if the task exists
 	_, err := ts.taskRepository.GetById(id)
 	if err != nil {

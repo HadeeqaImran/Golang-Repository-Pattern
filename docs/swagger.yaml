@@ -1,9 +1,4 @@
 definitions:
-  controllers.StatusRequest:
-    properties:
-      status:
-        type: string
-    type: object
   controllers.TaskRequest:
     properties:
       description:
@@ -11,6 +6,11 @@ definitions:
       status:
         type: string
       title:
+        type: string
+    type: object
+  dto.StatusRequest:
+    properties:
+      status:
         type: string
     type: object
   models.Status:
@@ -152,7 +152,7 @@ paths:
         name: task
         required: true
         schema:
-          $ref: '#/definitions/controllers.StatusRequest'
+          $ref: '#/definitions/dto.StatusRequest'
       produces:
       - application/json
       responses:

@@ -85,7 +85,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.StatusRequest"
+                            "$ref": "#/definitions/dto.StatusRequest"
                         }
                     }
                 ],
@@ -202,14 +202,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.StatusRequest": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "controllers.TaskRequest": {
             "type": "object",
             "properties": {
@@ -220,6 +212,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.StatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
                     "type": "string"
                 }
             }

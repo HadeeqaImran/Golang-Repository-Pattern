@@ -74,7 +74,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.StatusRequest"
+                            "$ref": "#/definitions/dto.StatusRequest"
                         }
                     }
                 ],
@@ -191,14 +191,6 @@
         }
     },
     "definitions": {
-        "controllers.StatusRequest": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "controllers.TaskRequest": {
             "type": "object",
             "properties": {
@@ -209,6 +201,14 @@
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.StatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
                     "type": "string"
                 }
             }

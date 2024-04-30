@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"repo_pattern/dto"
 	"repo_pattern/models"
 	"repo_pattern/services"
 	"strconv"
@@ -17,10 +18,6 @@ type TaskRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      string `json:"status" enum:"TODO,DOING,DONE"`
-}
-
-type StatusRequest struct {
-	Status string `json:"status" enum:"TODO,DOING,DONE"`
 }
 
 func NewTaskController(taskService *services.TaskService) *TaskController {
@@ -138,7 +135,7 @@ func (tc *TaskController) GetTaskById(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path integer true "Task ID" Format(uint64)
-// @Param task body StatusRequest true "Status object to be created"
+// @Param task body dto.StatusRequest true "Status object to be created"
 // @Success 200 {object} models.Task
 // @Router /tasks/status/{id} [patch]
 func (tc *TaskController) ChangeTaskStatus(c *fiber.Ctx) error {
@@ -149,7 +146,7 @@ func (tc *TaskController) ChangeTaskStatus(c *fiber.Ctx) error {
 	}
 
 	// Parse new status from request body
-	var status StatusRequest
+	var status dto.StatusRequest
 	if err := c.BodyParser(&status); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}

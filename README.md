@@ -91,3 +91,8 @@ func main() {
 	}
 }
 ```
+
+
+
+# ToDo next:
+Create DTOs and properly layer the architecture using them.
