@@ -8,11 +8,6 @@ definitions:
       title:
         type: string
     type: object
-  dto.StatusRequest:
-    properties:
-      status:
-        type: string
-    type: object
   models.Status:
     enum:
     - TODO
@@ -106,61 +101,6 @@ paths:
           schema:
             $ref: '#/definitions/models.Task'
       summary: Get Task by ID
-      tags:
-      - Task
-    put:
-      consumes:
-      - application/json
-      description: Update a task by its ID
-      parameters:
-      - description: Task ID
-        format: uint64
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Updated Task object
-        in: body
-        name: task
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.TaskRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Task'
-      summary: Update Task by ID
-      tags:
-      - Task
-  /tasks/status/{id}:
-    patch:
-      consumes:
-      - application/json
-      description: Change status of a task by ID
-      parameters:
-      - description: Task ID
-        format: uint64
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Status object to be created
-        in: body
-        name: task
-        required: true
-        schema:
-          $ref: '#/definitions/dto.StatusRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Task'
-      summary: Change Task Status
       tags:
       - Task
 swagger: "2.0"

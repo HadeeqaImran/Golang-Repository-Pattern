@@ -95,4 +95,18 @@ func main() {
 
 
 # ToDo next:
-Create DTOs and properly layer the architecture using them.
+Create DTOs and properly layer the architecture using them.   
+DTOs to not be used in Go. they aren't good.
+
+
+# Resources to study repo_pattern
+https://dakaii.medium.com/repository-pattern-in-golang-d22d3fa76d91   
+https://medium.com/@yohata/mastering-ddd-repository-design-patterns-in-go-2034486c82b3
+
+
+# Tasks Done Today
+Seperation of concerns in layers.
+
+
+# ToDo
+Singleton Pattern in Database Connection

@@ -2,7 +2,8 @@ package repositories
 
 import (
 	"errors"
-	"repo_pattern/models"
+	"repo_pattern/domain/entities"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -11,20 +12,53 @@ type TaskRepository struct {
 	db *gorm.DB
 }
 
+type Status string
+
+const (
+	TODO  Status = "TODO"
+	DOING Status = "DOING"
+	DONE  Status = "DONE"
+)
+
+type TaskRow struct {
+	ID          uint `gorm:"primaryKey"`
+	CreatedAt   time.Time
+	Title       string
+	Description string
+	Status      Status
+}
+
 func NewTaskRepository(db *gorm.DB) *TaskRepository {
 	return &TaskRepository{db}
 }
 
-func (tr *TaskRepository) Create(task *models.Task) error {
-	result := tr.db.Create(task)
+func (TaskRow) TableName() string {
+	return "tasks"
+}
+
+func NewTaskRow(task entities.CreateTask) *TaskRow {
+	return &TaskRow{
+		Title:       task.Title,
+		Description: task.Description,
+		Status:      Status(task.Status),
+	}
+}
+
+func (tr *TaskRepository) Create(task *entities.CreateTask) error {
+	taskRow := TaskRow{
+		Title:       task.Title,
+		Description: task.Description,
+		Status:      Status(task.Status),
+	}
+	result := tr.db.Model(&TaskRow{}).Create(&taskRow)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func (tr *TaskRepository) Update(task *models.Task) error {
-	result := tr.db.Model(&models.Task{}).Where("id = ?", task.ID).Updates(task)
+func (tr *TaskRepository) Update(task *entities.Task) error {
+	result := tr.db.Model(&TaskRow{}).Where("id = ?", task.ID).Updates(task)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -35,7 +69,7 @@ func (tr *TaskRepository) Update(task *models.Task) error {
 }
 
 func (tr *TaskRepository) Delete(id uint) error {
-	result := tr.db.Delete(&models.Task{}, id)
+	result := tr.db.Delete(&entities.Task{}, id)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -45,8 +79,8 @@ func (tr *TaskRepository) Delete(id uint) error {
 	return nil
 }
 
-func (tr *TaskRepository) GetAll() ([]models.Task, error) {
-	var tasks []models.Task
+func (tr *TaskRepository) GetAll() ([]entities.Task, error) {
+	var tasks []entities.Task
 	result := tr.db.Find(&tasks)
 	if result.Error != nil {
 		return nil, result.Error
@@ -54,8 +88,8 @@ func (tr *TaskRepository) GetAll() ([]models.Task, error) {
 	return tasks, nil
 }
 
-func (tr *TaskRepository) GetById(id uint) (*models.Task, error) {
-	var task models.Task
+func (tr *TaskRepository) GetById(id uint) (*entities.Task, error) {
+	var task entities.Task
 	result := tr.db.First(&task, id)
 	if result.Error != nil {
 		return nil, result.Error
@@ -65,21 +99,21 @@ func (tr *TaskRepository) GetById(id uint) (*models.Task, error) {
 
 // Change task status
 // UpdateTaskStatus updates the status of a task.
-func (tr *TaskRepository) UpdateTaskStatus(id uint, newStatus models.Status) error {
-	// Get the task by ID
-	task, err := tr.GetById(id)
-	if err != nil {
-		return err
-	}
+// func (tr *TaskRepository) UpdateTaskStatus(id uint, newStatus models.Status) error {
+// 	// Get the task by ID
+// 	task, err := tr.GetById(id)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	// Update the task's status
-	task.Status = newStatus
+// 	// Update the task's status
+// 	task.Status = newStatus
 
-	// Save the updated task
-	result := tr.db.Updates(&task)
-	if result.Error != nil {
-		return result.Error
-	}
+// 	// Save the updated task
+// 	result := tr.db.Updates(&task)
+// 	if result.Error != nil {
+// 		return result.Error
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

@@ -16,11 +16,11 @@ import (
 func setupRoutes(app *fiber.App, taskController *controllers.TaskController) {
 	// Routes for tasks
 	app.Post("/tasks", taskController.CreateTask)
-	app.Put("/tasks/:id", taskController.UpdateTask)
+	// app.Put("/tasks/:id", taskController.UpdateTask)
 	app.Delete("/tasks/:id", taskController.DeleteTask)
 	app.Get("/tasks", taskController.GetAllTasks)
 	app.Get("/tasks/:id", taskController.GetTaskById)
-	app.Patch("/tasks/status/:id", taskController.ChangeTaskStatus)
+	// app.Patch("/tasks/status/:id", taskController.ChangeTaskStatus)
 }
 
 func main() {

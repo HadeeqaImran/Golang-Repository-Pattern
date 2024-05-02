@@ -57,48 +57,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/status/{id}": {
-            "patch": {
-                "description": "Change status of a task by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Change Task Status",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "format": "uint64",
-                        "description": "Task ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Status object to be created",
-                        "name": "task",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.StatusRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Task"
-                        }
-                    }
-                }
-            }
-        },
         "/tasks/{id}": {
             "get": {
                 "description": "Get a task by its ID",
@@ -120,46 +78,6 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Task"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update a task by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Update Task by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "format": "uint64",
-                        "description": "Task ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Updated Task object",
-                        "name": "task",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.TaskRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -212,14 +130,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.StatusRequest": {
-            "type": "object",
-            "properties": {
-                "status": {
                     "type": "string"
                 }
             }

@@ -11,9 +11,9 @@ const (
 )
 
 type Task struct {
-	ID          uint `json:"id" gorm:"primaryKey"`
+	ID          uint `gorm:"primaryKey"`
 	CreatedAt   time.Time
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      Status `json:"status"`
+	Title       string
+	Description string
+	Status      Status
 }
