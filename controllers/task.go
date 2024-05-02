@@ -20,7 +20,7 @@ func NewTaskController(taskService *services.TaskService) *TaskController {
 // @Tags Task
 // @Accept json
 // @Produce json
-// @Param task body services.TaskServiceRequest true "Task object to be created"
+// @Param task body entities.CreateTask true "Task object to be created"
 // @Success 201 {object} models.Task
 // @Router /tasks [post]
 func (tc *TaskController) CreateTask(c *fiber.Ctx) error {
@@ -41,7 +41,7 @@ func (tc *TaskController) CreateTask(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path integer true "Task ID" Format(uint64)
-// @Param task body services.TaskServiceRequest true "Updated Task object"
+// @Param task body entities.UpdateTask true "Updated Task object"
 // @Success 200 {object} models.Task
 // @Router /tasks/{id} [put]
 func (tc *TaskController) UpdateTask(c *fiber.Ctx) error {
@@ -102,7 +102,7 @@ func (tc *TaskController) GetAllTasks(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path integer true "Task ID" Format(uint64)
-// @Success 200 {object} models.Task
+// @Success 200 {object} entities.Task
 // @Router /tasks/{id} [get]
 func (tc *TaskController) GetTaskById(c *fiber.Ctx) error {
 	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
@@ -124,8 +124,8 @@ func (tc *TaskController) GetTaskById(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path integer true "Task ID" Format(uint64)
-// @Param task body StatusRequest true "Status object to be created"
-// @Success 200 {object} models.Task
+// @Param task body entities.StatusChangeRequest true "Status object to be created"
+// @Success 200 {object} entities.Task
 // @Router /tasks/status/{id} [patch]
 func (tc *TaskController) ChangeTaskStatus(c *fiber.Ctx) error {
 	// Parse task ID from request path parameter
@@ -135,13 +135,13 @@ func (tc *TaskController) ChangeTaskStatus(c *fiber.Ctx) error {
 	}
 
 	// Parse new status from request body
-	var status services.Status
+	var status services.StatusChangeStruct
 	if err := c.BodyParser(&status); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	// Call service method to change task status
-	err = tc.taskService.ChangeTaskStatus(uint(id), status)
+	err = tc.taskService.ChangeTaskStatus(uint(id), &status)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

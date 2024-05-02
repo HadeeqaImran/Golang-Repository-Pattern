@@ -29,3 +29,7 @@ type UpdateTask struct {
 	Description string
 	Status      Status
 }
+
+type StatusChangeRequest struct {
+	Status Status
+}

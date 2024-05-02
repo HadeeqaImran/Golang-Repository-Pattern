@@ -1,10 +1,47 @@
 definitions:
-  dto.TaskRequest:
+  entities.CreateTask:
     properties:
       description:
         type: string
       status:
+        $ref: '#/definitions/entities.Status'
+      title:
         type: string
+    type: object
+  entities.Status:
+    enum:
+    - TODO
+    - DOING
+    - DONE
+    type: string
+    x-enum-varnames:
+    - TODO
+    - DOING
+    - DONE
+  entities.StatusChangeRequest:
+    properties:
+      status:
+        $ref: '#/definitions/entities.Status'
+    type: object
+  entities.Task:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/entities.Status'
+      title:
+        type: string
+    type: object
+  entities.UpdateTask:
+    properties:
+      description:
+        type: string
+      status:
+        $ref: '#/definitions/entities.Status'
       title:
         type: string
     type: object
@@ -51,7 +88,7 @@ paths:
         name: task
         required: true
         schema:
-          $ref: '#/definitions/dto.TaskRequest'
+          $ref: '#/definitions/entities.CreateTask'
       produces:
       - application/json
       responses:
@@ -99,7 +136,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Task'
+            $ref: '#/definitions/entities.Task'
       summary: Get Task by ID
       tags:
       - Task
@@ -119,7 +156,7 @@ paths:
         name: task
         required: true
         schema:
-          $ref: '#/definitions/dto.TaskRequest'
+          $ref: '#/definitions/entities.UpdateTask'
       produces:
       - application/json
       responses:
@@ -128,6 +165,34 @@ paths:
           schema:
             $ref: '#/definitions/models.Task'
       summary: Update Task by ID
+      tags:
+      - Task
+  /tasks/status/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Change status of a task by ID
+      parameters:
+      - description: Task ID
+        format: uint64
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status object to be created
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/entities.StatusChangeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Task'
+      summary: Change Task Status
       tags:
       - Task
 swagger: "2.0"

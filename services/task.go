@@ -49,6 +49,12 @@ func (ts *TaskServiceStruct) NewUpdateTaskEntity() *entities.UpdateTask {
 	}
 }
 
+func (sc *StatusChangeStruct) NewStatusChangeEntity() *entities.StatusChangeRequest {
+	return &entities.StatusChangeRequest{
+		Status: entities.Status(sc.Status),
+	}
+}
+
 func (ts *TaskService) CreateTask(task *TaskServiceStruct) error {
 	if !isValidStatus(string(task.Status)) {
 		return errors.New("invalid status value")
@@ -76,25 +82,25 @@ func (ts *TaskService) GetTaskById(id uint) (*entities.Task, error) {
 }
 
 // ChangeTaskStatus changes the status of a task.
-// func (ts *TaskService) ChangeTaskStatus(id uint, newStatus dto.StatusRequest) error {
-// 	// Check if the task exists
-// 	_, err := ts.taskRepository.GetById(id)
-// 	if err != nil {
-// 		return err
-// 	}
+func (ts *TaskService) ChangeTaskStatus(id uint, newStatus *StatusChangeStruct) error {
+	// Check if the task exists
+	_, err := ts.taskRepository.GetById(id)
+	if err != nil {
+		return err
+	}
 
-// 	if !isValidStatus(models.Status(newStatus.Status)) {
-// 		return errors.New("invalid status value")
-// 	}
+	if !isValidStatus(string(newStatus.Status)) {
+		return errors.New("invalid status value")
+	}
 
-// 	// Update the task status
-// 	err = ts.taskRepository.UpdateTaskStatus(id, models.Status(newStatus.Status))
-// 	if err != nil {
-// 		return err
-// 	}
+	// Update the task status
+	err = ts.taskRepository.UpdateTaskStatus(id, *newStatus.NewStatusChangeEntity())
+	if err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
 // Utility Functions
 func isValidStatus(status string) bool {

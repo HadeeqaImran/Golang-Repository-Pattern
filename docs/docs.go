@@ -43,7 +43,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.TaskRequest"
+                            "$ref": "#/definitions/entities.CreateTask"
                         }
                     }
                 ],
@@ -52,6 +52,48 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/status/{id}": {
+            "patch": {
+                "description": "Change status of a task by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Change Task Status",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "uint64",
+                        "description": "Task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status object to be created",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.StatusChangeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Task"
                         }
                     }
                 }
@@ -84,7 +126,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Task"
+                            "$ref": "#/definitions/entities.Task"
                         }
                     }
                 }
@@ -116,7 +158,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.TaskRequest"
+                            "$ref": "#/definitions/entities.UpdateTask"
                         }
                     }
                 ],
@@ -160,14 +202,69 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.TaskRequest": {
+        "entities.CreateTask": {
             "type": "object",
             "properties": {
                 "description": {
                     "type": "string"
                 },
                 "status": {
+                    "$ref": "#/definitions/entities.Status"
+                },
+                "title": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.Status": {
+            "type": "string",
+            "enum": [
+                "TODO",
+                "DOING",
+                "DONE"
+            ],
+            "x-enum-varnames": [
+                "TODO",
+                "DOING",
+                "DONE"
+            ]
+        },
+        "entities.StatusChangeRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/entities.Status"
+                }
+            }
+        },
+        "entities.Task": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/entities.Status"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.UpdateTask": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/entities.Status"
                 },
                 "title": {
                     "type": "string"

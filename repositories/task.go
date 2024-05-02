@@ -104,21 +104,21 @@ func (tr *TaskRepository) GetById(id uint) (*entities.Task, error) {
 
 // Change task status
 // UpdateTaskStatus updates the status of a task.
-// func (tr *TaskRepository) UpdateTaskStatus(id uint, newStatus models.Status) error {
-// 	// Get the task by ID
-// 	task, err := tr.GetById(id)
-// 	if err != nil {
-// 		return err
-// 	}
+func (tr *TaskRepository) UpdateTaskStatus(id uint, newStatus entities.StatusChangeRequest) error {
+	// Get the task by ID
+	task, err := tr.GetById(id)
+	if err != nil {
+		return err
+	}
 
-// 	// Update the task's status
-// 	task.Status = newStatus
+	// Update the task's status
+	task.Status = newStatus.Status
 
-// 	// Save the updated task
-// 	result := tr.db.Updates(&task)
-// 	if result.Error != nil {
-// 		return result.Error
-// 	}
+	// Save the updated task
+	result := tr.db.Updates(&task)
+	if result.Error != nil {
+		return result.Error
+	}
 
-// 	return nil
-// }
+	return nil
+}
