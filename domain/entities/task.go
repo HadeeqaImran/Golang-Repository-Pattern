@@ -25,7 +25,6 @@ type CreateTask struct {
 }
 
 type UpdateTask struct {
-	ID          uint
 	Title       string
 	Description string
 	Status      Status

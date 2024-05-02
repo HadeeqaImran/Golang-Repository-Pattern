@@ -43,7 +43,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.TaskRequest"
+                            "$ref": "#/definitions/dto.TaskRequest"
                         }
                     }
                 ],
@@ -89,6 +89,46 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Update a task by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Update Task by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "uint64",
+                        "description": "Task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Task object",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a task by its ID",
                 "consumes": [
@@ -120,7 +160,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.TaskRequest": {
+        "dto.TaskRequest": {
             "type": "object",
             "properties": {
                 "description": {

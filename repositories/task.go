@@ -57,14 +57,19 @@ func (tr *TaskRepository) Create(task *entities.CreateTask) error {
 	return nil
 }
 
-func (tr *TaskRepository) Update(task *entities.Task) error {
-	result := tr.db.Model(&TaskRow{}).Where("id = ?", task.ID).Updates(task)
-	if result.Error != nil {
-		return result.Error
+func (tr *TaskRepository) Update(id uint64, task *entities.UpdateTask) error {
+	result, err := tr.GetById(uint(id))
+	if err != nil {
+		return err
 	}
-	if result.RowsAffected == 0 {
-		return errors.New("no task found with the given ID")
+
+	taskRow := TaskRow{
+		ID:          result.ID,
+		Title:       task.Title,
+		Description: task.Description,
+		Status:      Status(task.Status),
 	}
+	tr.db.Model(&TaskRow{}).Where("id = ?", id).Updates(taskRow)
 	return nil
 }
 

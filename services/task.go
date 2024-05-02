@@ -21,6 +21,10 @@ type TaskServiceStruct struct {
 	Status      Status
 }
 
+type StatusChangeStruct struct {
+	Status Status
+}
+
 type TaskService struct {
 	taskRepository *repositories.TaskRepository
 }
@@ -37,6 +41,14 @@ func (ts *TaskServiceStruct) NewTaskEntity() *entities.CreateTask {
 	}
 }
 
+func (ts *TaskServiceStruct) NewUpdateTaskEntity() *entities.UpdateTask {
+	return &entities.UpdateTask{
+		Title:       ts.Title,
+		Description: ts.Description,
+		Status:      entities.Status(ts.Status),
+	}
+}
+
 func (ts *TaskService) CreateTask(task *TaskServiceStruct) error {
 	if !isValidStatus(string(task.Status)) {
 		return errors.New("invalid status value")
@@ -44,11 +56,11 @@ func (ts *TaskService) CreateTask(task *TaskServiceStruct) error {
 	return ts.taskRepository.Create(task.NewTaskEntity())
 }
 
-func (ts *TaskService) UpdateTask(task *TaskServiceStruct) error {
+func (ts *TaskService) UpdateTask(id uint64, task *TaskServiceStruct) error {
 	if !isValidStatus(string(task.Status)) {
 		return errors.New("invalid status value")
 	}
-	return ts.taskRepository.Update(task)
+	return ts.taskRepository.Update(id, task.NewUpdateTaskEntity())
 }
 
 func (ts *TaskService) DeleteTask(id uint) error {
